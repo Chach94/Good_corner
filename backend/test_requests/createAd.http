@@ -1,0 +1,15 @@
+POST http://localhost:3000/ads
+Content-Type: application/json
+
+{
+    
+   "title": "Macbook air M2",
+    "description":
+      "Description of the computer..",
+    "owner": "Cha",
+   " price": 1500,
+   " picture":
+      "https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/macbook-air-midnight-select-20220606?wid=452&hei=420&fmt=jpeg&qlt=95&.v=1653084303665",
+    "location": "Lyon"
+    
+}
