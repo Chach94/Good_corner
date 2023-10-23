@@ -4,7 +4,7 @@ import { Ad } from "./types";
 const app = express();
 const port = 3000;
 
-const ads: Ad[] = [
+let ads: Ad[] = [
   {
     id: 1,
     title: "Bike to sell",
@@ -43,11 +43,37 @@ app.get("/ads", (req: Request, res: Response) => {
 
 app.post("/ads", (req: Request, res: Response) => {
   const id = ads.length + 1;
-  const newAd = { ...req.body, id, createdAt: new Date().toISOString() };
+  const newAd = { ...req.body, id, createdAt: new Date().toISOString() }; // spread req.body => récupération de tout l'élément + ajout id en paramètre + date 
   ads.push(newAd);
 
   res.send("Request receveid, check the backend terminal");
 });
+
+app.delete('/ads/:id',(req : Request, res: Response) => {
+  const idOfAdToDelete = parseInt(req.params.id, 10);
+
+  if(!ads.find(ad => ad.id === idOfAdToDelete)) return res.sendStatus(404);
+  
+    /* ads = ads.filter((ad) => ad.id !== idOfAdToDelete);*/  // Methode déclarative : supprimer un élèment de l'id avec une condition si == id du tableau 
+
+    ads.splice(ads.findIndex((ad) => ad.id === idOfAdToDelete), 1) // Méthode impérative : supprimer un élèment du tableau en recherchant l'index
+
+    res.status(204).send({ message: "ad deleted !" });
+  
+  console.log(idOfAdToDelete);
+
+})
+
+app.patch('/ads/:id', (req: Request, res : Response) => {
+  const idOfAdToUpdate = parseInt(req.params.id, 10);
+
+  if(!ads.find(ad => ad.id === idOfAdToUpdate)) return res.sendStatus(404);
+
+      const indexOfAdToUpdate = ads.findIndex((ad) => ad.id === idOfAdToUpdate); 
+      ads[indexOfAdToUpdate] = {...ads[indexOfAdToUpdate], ...req.body}; 
+
+      res.send(ads[indexOfAdToUpdate]); 
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
